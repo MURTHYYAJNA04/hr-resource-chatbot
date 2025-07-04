@@ -1,0 +1,92 @@
+{
+  "employees": [
+    {
+      "id": 1,
+      "name": "Alice Johnson",
+      "skills": ["Python", "React", "AWS"],
+      "experience_years": 5,
+      "projects": ["E-commerce Platform", "Healthcare Dashboard"],
+      "availability": "available"
+    },
+    {
+      "id": 2,
+      "name": "Michael Rodriguez",
+      "skills": ["Java", "Spring", "Docker"],
+      "experience_years": 6,
+      "projects": ["Inventory System", "Banking App"],
+      "availability": "unavailable"
+    },
+    {
+      "id": 3,
+      "name": "Sarah Chen",
+      "skills": ["TensorFlow", "PyTorch", "Medical Data"],
+      "experience_years": 6,
+      "projects": ["Medical Diagnosis Platform"],
+      "availability": "available"
+    },
+    {
+      "id": 4,
+      "name": "David Patel",
+      "skills": ["React Native", "Node.js", "MongoDB"],
+      "experience_years": 4,
+      "projects": ["Ride Sharing App", "Social Media App"],
+      "availability": "available"
+    },
+    {
+      "id": 5,
+      "name": "Priya Singh",
+      "skills": ["Python", "Scikit-learn", "Flask"],
+      "experience_years": 3,
+      "projects": ["Fraud Detection", "Sales Forecasting"],
+      "availability": "unavailable"
+    },
+    {
+      "id": 6,
+      "name": "Ahmed Khan",
+      "skills": ["AWS", "Kubernetes", "Docker"],
+      "experience_years": 7,
+      "projects": ["Cloud Migration", "DevOps Automation"],
+      "availability": "available"
+    },
+    {
+      "id": 7,
+      "name": "Emily Brown",
+      "skills": ["JavaScript", "HTML", "CSS"],
+      "experience_years": 2,
+      "projects": ["Marketing Website", "Landing Pages"],
+      "availability": "available"
+    },
+    {
+      "id": 8,
+      "name": "James Lee",
+      "skills": ["C#", ".NET", "Azure"],
+      "experience_years": 8,
+      "projects": ["ERP System", "Logistics Dashboard"],
+      "availability": "unavailable"
+    },
+    {
+      "id": 9,
+      "name": "Nina Gupta",
+      "skills": ["Python", "Pandas", "Tableau"],
+      "experience_years": 4,
+      "projects": ["HR Analytics", "Customer Segmentation"],
+      "availability": "available"
+    },
+    {
+      "id": 10,
+      "name": "Carlos Mendez",
+      "skills": ["Go", "Microservices", "Kafka"],
+      "experience_years": 5,
+      "projects": ["Streaming Platform", "Ad Server"],
+      "availability": "available"
+    },
+    {
+      "id": 11,
+      "name": "Rebecca Moore",
+      "skills": ["SQL", "Power BI", "ETL"],
+      "experience_years": 6,
+      "projects": ["Finance Dashboard", "Data Warehouse"],
+      "availability": "unavailable"
+    }
+]
+}

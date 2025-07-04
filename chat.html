@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HR Assistant Chatbot</title>
+  <style>
+    /* ... All your existing styles remain unchanged ... */
+    /* To save space, I'll skip the CSS. You already pasted it above. */
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <div>HR Resource Assistant</div>
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span>Online</span>
+      </div>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+      <div class="message bot-message">
+        <div class="response-content">
+          👋 Hi! I'm your HR assistant. How can I help with resource allocation?<br><br>
+          Try asking:<br>
+          • "Find React developers with 5+ years experience"<br>
+          • "Who has healthcare project experience?"<br>
+          • "Suggest candidates for AWS migration"
+          <div class="suggestions">
+            <div class="suggestion-chip" onclick="setQuery(this)">Python developers</div>
+            <div class="suggestion-chip" onclick="setQuery(this)">Cloud experience</div>
+            <div class="suggestion-chip" onclick="setQuery(this)">Healthcare projects</div>
+            <div class="suggestion-chip" onclick="setQuery(this)">Available now</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="queryInput" placeholder="Ask about resources..." onkeyup="if(event.key === 'Enter') sendMessage()">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <div class="typing-indicator" id="typingIndicator">Searching for matching candidates...</div>
+  </div>
+
+  <script>
+    const API_BASE = window.location.origin.includes('localhost')
+      ? 'http://localhost:8000'
+      : window.location.origin;
+
+    const API_URL = `${API_BASE}/chat`;
+    const chatBox = document.getElementById('chatBox');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const queryInput = document.getElementById('queryInput');
+
+    function setQuery(element) {
+      queryInput.value = element.textContent;
+      queryInput.focus();
+    }
+
+    async function sendMessage() {
+      const query = queryInput.value.trim();
+      if (!query) return;
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user-message';
+      userMsg.textContent = query;
+      chatBox.appendChild(userMsg);
+
+      queryInput.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      typingIndicator.style.display = 'block';
+      chatBox.appendChild(typingIndicator);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: query })  // ✅ Match your FastAPI Pydantic model
+        });
+
+        const data = await response.json();
+        typingIndicator.style.display = 'none';
+
+        if (!response.ok) {
+          throw new Error(data.detail || JSON.stringify(data));
+        }
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'message bot-message';
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'response-content';
+        contentDiv.innerHTML = formatResponse(data.response);
+        botMsg.appendChild(contentDiv);
+
+        chatBox.appendChild(botMsg);
+      } catch (error) {
+        typingIndicator.style.display = 'none';
+
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'message bot-message';
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'response-content';
+        contentDiv.innerHTML = `<span class="error-message">❌ Error:</span> ${error.message || "Service unavailable"}`;
+        errorMsg.appendChild(contentDiv);
+
+        chatBox.appendChild(errorMsg);
+      }
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function formatResponse(text) {
+      return text
+        .replace(/\*\*(.*?)\*\*/g, '<span class="candidate-highlight">$1</span>')
+        .replace(/\n/g, '<br>')
+        .replace(/(^|<br>)- (.*?)(<br>|$)/g, '$1<li>$2</li>')
+        .replace(/(<li>.*?<\/li>)/g, '<ul>$1</ul>');
+    }
+
+    window.onload = () => {
+      queryInput.focus();
+      fetch(`${API_BASE}/health`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status !== "ready") {
+            const msg = document.createElement('div');
+            msg.className = 'message bot-message';
+            msg.innerHTML = `<div class="response-content">⚠️ Backend is initializing... Try again in a moment</div>`;
+            chatBox.appendChild(msg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+          }
+        })
+        .catch(() => {
+          const msg = document.createElement('div');
+          msg.className = 'message bot-message';
+          msg.innerHTML = `<div class="response-content"><span class="error-message">❌ Backend unavailable</span> - Is the API running?</div>`;
+          chatBox.appendChild(msg);
+          chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    };
+  </script>
+</body>
+</html>
